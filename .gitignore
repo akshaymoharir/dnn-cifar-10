@@ -1,3 +1,7 @@
+
+# Exclude all the data for training/testing/experimentation
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

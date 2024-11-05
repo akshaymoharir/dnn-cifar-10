@@ -54,7 +54,7 @@ def explore_dataset():
     sample_image = np.transpose(sample_image, (1, 2, 0))
     #plt.imshow(sample_image)
     plt.title(training_data.classes[sample_label]) 
-    plt.imsave("sample_image.png", sample_image)
+    #plt.imsave("sample_image.png", sample_image)
 
     # Plot random examples from training data for each class
     # get some random training images

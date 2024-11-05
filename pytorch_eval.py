@@ -6,6 +6,7 @@ import torch
 
 print(f"Torch version:{torch.__version__}")
 
+PATH = './cifar_net.pth'
 
 ########################################################################################################
 ########################################################################################################
@@ -171,7 +172,7 @@ optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 ########################################################################################################
 
 # Train the network
-
+'''
 for epoch in range(2):  # loop over the dataset multiple times
 
     running_loss = 0.0
@@ -196,9 +197,9 @@ for epoch in range(2):  # loop over the dataset multiple times
 
 print('Finished Training')
 
-PATH = './cifar_net.pth'
-torch.save(net.state_dict(), PATH)
 
+torch.save(net.state_dict(), PATH)
+'''
 ########################################################################################################
 ########################################################################################################
 
@@ -208,10 +209,10 @@ dataiter = iter(testloader)
 images, labels = next(dataiter)
 
 # print images
-imshow(torchvision.utils.make_grid(images))
+#imshow(torchvision.utils.make_grid(images))
 print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
 
-net = Net()
+net = myVGG16()
 net.load_state_dict(torch.load(PATH, weights_only=True))
 
 outputs = net(images)
@@ -223,9 +224,11 @@ print('Predicted: ', ' '.join(f'{classes[predicted[j]]:5s}'
 
 correct = 0
 total = 0
+processed = 0
 # since we're not training, we don't need to calculate the gradients for our outputs
 with torch.no_grad():
     for data in testloader:
+        processed += 1
         images, labels = data
         # calculate outputs by running images through the network
         outputs = net(images)
@@ -233,5 +236,6 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
-
+        print(f'Accuracy of the network on the test images: {100 * correct // processed} %')
+        
 print(f'Accuracy of the network on the 10000 test images: {100 * correct // total} %')

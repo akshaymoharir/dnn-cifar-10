@@ -3,7 +3,11 @@
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 import torchvision
+
+from configs import BATCH_SIZE
+
 
 # Required to visualize from container running on mac
 matplotlib.use('Agg')
@@ -24,7 +28,12 @@ def relu_derivative(z):
         relu_derivative = 1
     return relu_derivative
 
-def explore_dataset(training_data, validation_data, train_dataloader, validation_dataloader):
+def explore_dataset():
+
+    training_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=torchvision.transforms.ToTensor())
+    train_dataloader = torch.utils.data.DataLoader(training_data, batch_size=BATCH_SIZE, shuffle=True, num_workers=4)
+    validation_data = torchvision.datasets.CIFAR10(root='./data', train=False, download=True)
+    
     print(f"\nClasses in CIFAR10 dataset are:\n{training_data.class_to_idx}\n")
     # Print number of examples in training and validation data
     print(f"Number of training examples:{training_data.__len__()}")
@@ -43,9 +52,9 @@ def explore_dataset(training_data, validation_data, train_dataloader, validation
     # Plot random example chosen
     sample_image, sample_label = training_data[training_data_random_idx]
     sample_image = np.transpose(sample_image, (1, 2, 0))
-    plt.imshow(sample_image)
+    #plt.imshow(sample_image)
     plt.title(training_data.classes[sample_label]) 
-    plt.savefig('sample_image.png')
+    plt.imsave("sample_image.png", sample_image)
 
     # Plot random examples from training data for each class
     # get some random training images
